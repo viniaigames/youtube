@@ -1,248 +1,164 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Vini AI Kids Game Zone</title>
+    <title>Vini AI Games</title>
     <style>
-        @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-            100% { transform: translateY(0px); }
-        }
+        @keyframes float { 0%,100% {transform:translateY(0)} 50% {transform:translateY(-10px)} }
+        @keyframes pulse { 0%,100% {transform:scale(1)} 50% {transform:scale(1.05)} }
+        @keyframes rainbow { 0% {color:#f00} 25% {color:#ff0} 50% {color:#0f0} 75% {color:#00f} 100% {color:#f00} }
+        @keyframes gradientBG { 0%,100% {background-position:0 50%} 50% {background-position:100% 50%} }
 
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-
-        @keyframes rainbow {
-            0% { color: #ff0000; }
-            20% { color: #ffa500; }
-            40% { color: #ffff00; }
-            60% { color: #008000; }
-            80% { color: #0000ff; }
-            100% { color: #ff0000; }
-        }
+        * { margin:0; padding:0; box-sizing:border-box; }
 
         body {
-            font-family: 'Comic Sans MS', Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-            min-height: 100vh;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
-            cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath fill='%23ffffff' d='M7.5,4A5.5,5.5 0 0,1 13,9.5C13,11.11 12.41,12.59 11.44,13.73L14.71,17H15.5L20.5,22L19,23.5L14,18.5V17.71L10.73,14.44C9.59,15.41 8.11,16 6.5,16A5.5,5.5 0 0,1 1,10.5A5.5,5.5 0 0,1 6.5,5M6.5,6A3.5,3.5 0 0,0 3,9.5A3.5,3.5 0 0,0 6.5,13A3.5,3.5 0 0,0 10,9.5A3.5,3.5 0 0,0 6.5,6Z'/%3E%3C/svg%3E"), auto;
+            font-family:'Comic Sans MS',sans-serif;
+            min-height:100vh;
+            background:linear-gradient(135deg,#667eea,#764ba2);
+            background-size:400% 400%;
+            animation:gradientBG 15s infinite;
+            padding:20px;
         }
 
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            position: relative;
-        }
-
-        .floating-elements {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 1;
-        }
+        .container { max-width:1200px; margin:0 auto; position:relative; }
 
         .floating-element {
-            position: absolute;
-            animation: float 3s ease-in-out infinite;
-            font-size: 2em;
-            opacity: 0.7;
-        }
-
-        .header {
-            text-align: center;
-            margin-bottom: 40px;
-            position: relative;
+            position:absolute;
+            font-size:2em;
+            opacity:.7;
+            animation:float 3s infinite;
         }
 
         h1 {
-            color: white;
-            font-size: 3em;
-            margin: 0;
-            padding: 20px;
-            text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.3);
-            animation: rainbow 8s linear infinite;
+            color:#fff;
+            font-size:3em;
+            text-shadow:3px 3px 5px rgba(0,0,0,.3);
+            animation:rainbow 8s infinite;
+            text-align:center;
+            padding:20px;
         }
 
         .subtitle {
-            color: white;
-            font-size: 1.5em;
-            animation: pulse 2s infinite;
+            color:#fff;
+            font-size:1.5em;
+            animation:pulse 2s infinite;
+            text-align:center;
         }
 
         .game-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
-            padding: 20px;
-            position: relative;
-            z-index: 2;
+            display:grid;
+            grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+            gap:20px;
+            padding:20px;
+            position:relative;
+            z-index:1;
         }
 
         .game-card {
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 15px;
-            padding: 20px;
-            text-align: center;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            position: relative;
-            overflow: hidden;
+            background:rgba(255,255,255,.9);
+            border-radius:15px;
+            padding:20px;
+            text-align:center;
+            transition:.3s;
+            box-shadow:0 4px 15px rgba(0,0,0,.1);
         }
 
         .game-card:hover {
-            transform: translateY(-10px) rotate(2deg);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
-        }
-
-        .game-card::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(45deg, rgba(255,255,255,0.1), rgba(255,255,255,0.5));
-            transform: rotate(45deg);
-            transition: 0.5s;
-            opacity: 0;
-        }
-
-        .game-card:hover::before {
-            opacity: 1;
-            transform: rotate(45deg) translate(50%, 50%);
+            transform:translateY(-10px) rotate(2deg);
+            box-shadow:0 15px 30px rgba(0,0,0,.2);
         }
 
         .category {
-            display: inline-block;
-            padding: 8px 15px;
-            border-radius: 20px;
-            font-size: 1em;
-            margin-bottom: 15px;
-            font-weight: bold;
-            transform: rotate(-2deg);
-            transition: transform 0.3s ease;
+            display:inline-block;
+            padding:8px 15px;
+            border-radius:20px;
+            font-weight:bold;
+            margin-bottom:15px;
         }
 
-        .game-card:hover .category {
-            transform: rotate(2deg) scale(1.1);
-        }
-
-        .adventure { background: #fde68a; color: #92400e; }
-        .action { background: #bfdbfe; color: #1e40af; }
-        .strategy { background: #bbf7d0; color: #166534; }
-        .classic { background: #fecaca; color: #991b1b; }
-        .shooter { background: #ddd6fe; color: #5b21b6; }
+        .adventure { background:#fde68a; color:#92400e; }
+        .action { background:#bfdbfe; color:#1e40af; }
+        .strategy { background:#bbf7d0; color:#166534; }
+        .classic { background:#fecaca; color:#991b1b; }
+        .shooter { background:#ddd6fe; color:#5b21b6; }
 
         .game-title {
-            font-size: 1.8em;
-            margin: 15px 0;
-            color: #1a202c;
-            transition: transform 0.3s ease;
-        }
-
-        .game-card:hover .game-title {
-            transform: scale(1.1);
+            font-size:1.8em;
+            margin:15px 0;
+            color:#1a202c;
         }
 
         .game-description {
-            color: #4a5568;
-            margin-bottom: 20px;
-            font-size: 1.1em;
+            color:#4a5568;
+            margin-bottom:20px;
+            font-size:1.1em;
         }
 
         .play-button {
-            background: #4c1d95;
-            color: white;
-            border: none;
-            padding: 12px 25px;
-            border-radius: 25px;
-            cursor: pointer;
-            font-size: 1.2em;
-            transition: all 0.3s ease;
-            width: 100%;
-            position: relative;
-            overflow: hidden;
+            background:#4c1d95;
+            color:#fff;
+            border:none;
+            padding:12px;
+            border-radius:25px;
+            font-size:1.2em;
+            width:100%;
+            cursor:pointer;
+            transition:.3s;
         }
 
         .play-button:hover {
-            background: #5b21b6;
-            transform: scale(1.05);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-        }
-
-        .play-button::after {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
-            transform: rotate(45deg);
-            transition: 0.5s;
-        }
-
-        .play-button:hover::after {
-            left: 100%;
-            top: 100%;
+            background:#5b21b6;
+            transform:scale(1.05);
+            box-shadow:0 5px 15px rgba(0,0,0,.3);
         }
 
         footer {
-            text-align: center;
-            color: white;
-            margin-top: 40px;
-            padding: 20px;
-            font-size: 1.2em;
-            position: relative;
-            z-index: 2;
+            text-align:center;
+            color:#fff;
+            margin-top:40px;
+            padding:20px;
         }
 
-        #confetti {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 9999;
+        .youtube-btn {
+            display:inline-flex;
+            align-items:center;
+            background:#f00;
+            color:#fff;
+            padding:10px 20px;
+            border-radius:25px;
+            text-decoration:none;
+            margin-top:15px;
+            transition:.3s;
         }
+
+        .youtube-btn:hover {
+            transform:scale(1.05);
+            background:#c00;
+        }
+
+        .youtube-icon { margin-right:10px; }
     </style>
 </head>
 <body>
-    <div id="confetti"></div>
     <div class="container">
-        <div class="floating-elements" id="floatingElements"></div>
+        <div id="floatingElements"></div>
         
-        <div class="header">
-            <h1>🎮 Vini AI Kids Game Zone 🎮</h1>
-            <p class="subtitle">Choose Your Adventure!</p>
-        </div>
+        <h1>🎮 Vini AI Kids Game Zone 🎮</h1>
+        <p class="subtitle">Choose Your Adventure!</p>
 
         <div id="gameGrid" class="game-grid"></div>
 
         <footer>
             <p>🌟 Have fun playing these amazing AI-powered games! 🌟</p>
+            <a href="https://www.youtube.com/@ViniAIGames" target="_blank" class="youtube-btn">
+                <svg class="youtube-icon" height="24" width="24" viewBox="0 0 24 24" fill="white">
+                    <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                </svg>
+                Subscribe to ViniAIGames
+            </a>
         </footer>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tsparticles/1.18.11/tsparticles.min.js"></script>
     <script>
-        // Game data
         const games = [
             {
                 title: 'Baldi Hunt Game',
@@ -286,10 +202,10 @@
             }
         ];
 
-        // Create floating elements
-        const emojis = ['🎮', '🎲', '🎯', '🎨', '🎪', '🎭', '🎪'];
+        const emojis = ['🎮', '🎲', '🎯', '🎨', '🎪', '🎭'];
         const floatingElements = document.getElementById('floatingElements');
 
+        // Create floating elements
         for (let i = 0; i < 15; i++) {
             const element = document.createElement('div');
             element.className = 'floating-element';
@@ -300,110 +216,15 @@
             floatingElements.appendChild(element);
         }
 
-        function createGameCard(game) {
-            const card = document.createElement('div');
-            card.className = 'game-card';
-            card.innerHTML = `
+        // Create game cards
+        document.getElementById('gameGrid').innerHTML = games.map(game => `
+            <div class="game-card">
                 <span class="category ${game.categoryClass}">${game.category}</span>
                 <h2 class="game-title">${game.icon} ${game.title}</h2>
                 <p class="game-description">${game.description}</p>
-                <button class="play-button" onclick="openGame('${game.url}')">Play Now! 🎮</button>
-            `;
-            return card;
-        }
-
-        function openGame(url) {
-            // Check if particles container exists and is empty
-            const particlesContainer = document.getElementById("confetti");
-            if (particlesContainer && !particlesContainer.firstChild) {
-                createConfetti();
-                setTimeout(() => {
-                    window.open(url, '_blank');
-                }, 500);
-            } else {
-                window.open(url, '_blank');
-            }
-        }
-
-        // Initialize game grid
-        const gameGrid = document.getElementById('gameGrid');
-        games.forEach(game => {
-            gameGrid.appendChild(createGameCard(game));
-        });
-
-        // Configure and start particles
-        tsParticles.load("confetti", {
-            particles: {
-                number: {
-                    value: 0
-                },
-                color: {
-                    value: ["#FF0000", "#00FF00", "#0000FF", "#FFFF00", "#FF00FF", "#00FFFF"]
-                },
-                shape: {
-                    type: "circle"
-                },
-                opacity: {
-                    value: 0.7,
-                    animation: {
-                        enable: true,
-                        minimumValue: 0,
-                        speed: 2,
-                        startValue: "max",
-                        destroy: "min"
-                    }
-                },
-                size: {
-                    value: 4,
-                    random: true
-                },
-                move: {
-                    enable: true,
-                    gravity: {
-                        enable: true,
-                        acceleration: 9.81
-                    },
-                    speed: 10,
-                    direction: "none",
-                    random: true,
-                    straight: false,
-                    outMode: "destroy"
-                }
-            },
-            interactivity: {
-                detectsOn: "window",
-                events: {
-                    resize: true
-                }
-            },
-            detectRetina: true
-        });
-
-        function createConfetti() {
-            tsParticles.load("confetti", {
-                particles: {
-                    number: {
-                        value: 100
-                    }
-                }
-            });
-            
-            // Clear confetti after animation
-            setTimeout(() => {
-                tsParticles.domItem("confetti").destroy();
-            }, 2000);
-        }
+                <button class="play-button" onclick="window.open('${game.url}', '_blank')">Play Now! 🎮</button>
+            </div>
+        `).join('');
     </script>
-            <footer>
-            <p>🌟 Have fun playing these amazing AI-powered games! 🌟</p>
-            <a href="https://www.youtube.com/@ViniAIGames" target="_blank" style="color: white; text-decoration: none; display: inline-block; margin-top: 10px;">
-                <div style="display: flex; align-items: center; justify-content: center; gap: 10px;">
-                    <svg height="24" width="24" viewBox="0 0 24 24" fill="white">
-                        <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-                    </svg>
-                    Subscribe to ViniAIGames
-                </div>
-            </a>
-        </footer>
 </body>
 </html>
